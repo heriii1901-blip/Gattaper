@@ -1,0 +1,78 @@
+/* Hasil pencarian online: cover asli, skeleton, dan catatan sumber */
+
+/* Cover anime asli menimpa warna gradasi sementara */
+.card {
+  background: var(--sf);
+}
+
+.card img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card span {
+  position: relative;
+}
+
+/* Video & foto: kartu ikut tinggi gambar (grid ala Pinterest) */
+.mas .rv {
+  display: block;
+  position: relative;
+  break-inside: avoid;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--sf);
+  color: #fff;
+  text-decoration: none;
+}
+
+.rv img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.rv span {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 16px 8px 6px;
+  font-size: 12px;
+  background: linear-gradient(transparent,rgba(0,0,0,.7));
+}
+
+.rv em {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: rgba(0,0,0,.6);
+  color: #fff;
+  font-size: 11px;
+  font-style: normal;
+  padding: 2px 7px;
+  border-radius: 6px;
+}
+
+/* Kotak loading */
+.sk {
+  border-radius: 10px;
+  background: var(--sf);
+  animation: sk 1.2s ease-in-out infinite;
+}
+
+@keyframes sk {
+  50% { opacity: .45; }
+}
+
+.note {
+  text-align: center;
+  color: var(--mu);
+  font-size: 12px;
+  padding: 14px 0 4px;
+}
