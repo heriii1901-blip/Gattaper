@@ -4,6 +4,8 @@
 @import './components/search.css';
 @import './components/pills.css';
 @import './components/media.css';
+@import './components/results.css';
+@import './components/detail.css';
 @import './components/history.css';
 @import './components/bottom-nav.css';
 @import './components/add.css';
