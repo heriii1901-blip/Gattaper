@@ -4,7 +4,8 @@ import { Icon } from '../components/Icon.jsx'
 import { Pills } from '../components/Pills.jsx'
 import { Media } from '../components/Media.jsx'
 
-export function Cari({ data, cat, setCat }) {
+export function Cari({ data }) {
+  const [cat, setCat] = useState('anime')
   const [q, setQ] = useState('')
   const find = (t) => data.filter((d) => d.t === t && d.n.toLowerCase().includes(q.toLowerCase()))
 
