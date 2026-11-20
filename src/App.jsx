@@ -29,7 +29,7 @@ export default function App() {
       if (t === 'anime') {
         const ex = prev.find((x) => x.t === 'anime' && x.n.toLowerCase() === n.toLowerCase())
         if (ex) // season baru menyatu ke wadah anime yang sama
-          return prev.map((x) => x === ex ? { ...x, { id: Date.now(), t, n, seasons: [s], ts: Date.now() } : x)
+          return prev.map((x) => x === ex ? { ...x, seasons: x.seasons.includes(s) ? x.seasons : [...x.seasons, s], ts: Date.now(), hid: false } : x)
         return [{ id: Date.now(), t, n, seasons: [s], ts: Date.now() }, ...prev]
       }
       return [{ id: Date.now(), t, n, h: 1 + Math.random() * 0.9, c: 3 + Math.floor(Math.random() * 8), ts: Date.now() }, ...prev]
