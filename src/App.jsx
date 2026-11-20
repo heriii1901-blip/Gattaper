@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { useLiquidPill } from './useLiquidPill.js'
 import { NAME_KOLEKSI, CATS, SEED, col, ago } from './data.js'
 
 const P = {
@@ -23,10 +24,14 @@ const NAV = [
 const cap = (s) => s[0].toUpperCase() + s.slice(1)
 
 function Pills({ cat, setCat }) {
+  const box = useRef(null)
+  const items = useRef([])
+  const pill = useLiquidPill(box, items, CATS.findIndex(([k]) => k === cat))
   return (
-    <div className="pills">
-      {CATS.map(([k, l]) => (
-        <button key={k} className={'pill' + (cat === k ? ' on' : '')} onClick={() => setCat(k)}>
+    <div className="pills" ref={box}>
+      <span className="pill-ind" style={pill} />
+      {CATS.map(([k, l], i) => (
+        <button key={k} ref={(el) => (items.current[i] = el)} className={'pill' + (cat === k ? ' on' : '')} onClick={() => setCat(k)}>
           <Icon n={k} />{l}
         </button>
       ))}
@@ -197,6 +202,10 @@ export default function App() {
     setAdding(false)
   }
 
+  const navBox = useRef(null)
+  const navItems = useRef([])
+  const navPill = useLiquidPill(navBox, navItems, NAV.findIndex((n) => n[0] === page), { w: 56, h: 32 })
+
   const title = NAV.find((n) => n[0] === page)[1]
 
   return (
@@ -210,10 +219,11 @@ export default function App() {
         {page === 'profil' && <Profil data={data} toggleTheme={toggleTheme} />}
       </main>
       {page === 'koleksi' && <button className="fab" aria-label="Tambah" onClick={() => setAdding(true)}>+</button>}
-      <nav>
-        {NAV.map(([k, l]) => (
+      <nav ref={navBox}>
+        <span className="nav-pill" style={navPill} />
+        {NAV.map(([k, l], i) => (
           <button key={k} className={page === k ? 'on' : ''} onClick={() => setPage(k)}>
-            <i><Icon n={k} s={22} /></i>{l}
+            <i ref={(el) => (navItems.current[i] = el)}><Icon n={k} s={22} /></i>{l}
           </button>
         ))}
       </nav>
