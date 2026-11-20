@@ -1,0 +1,23 @@
+/* Halaman Profil */
+
+.stat .pill.on {
+  background: var(--ac2);
+  border-color: var(--ac);
+}
+
+/* Profil */
+.menu {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 14px 4px;
+  border-bottom: 1px solid var(--ln);
+  cursor: pointer;
+}
+
+.stat {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin: 14px 0;
+}
