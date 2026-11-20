@@ -110,41 +110,102 @@
   font-weight: 600;
 }
 
+/* Tombol aksi: Favorit dan buka di AniList */
+.det-act {
+  display: flex;
+  gap: 8px;
+  margin: 0 0 14px;
+}
+
+.act {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--ln);
+  background: var(--sf);
+  color: var(--tx);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background .2s, color .2s, border-color .2s;
+}
+
+.act.on {
+  background: var(--ac2);
+  border-color: var(--ac);
+  color: var(--ac);
+}
+
+/* Baris "N episode" + pengatur urutan */
+.det-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 6px 0 10px;
+}
+
 .det-h {
   font-size: 15px;
   font-weight: 800;
-  margin: 6px 0 8px;
 }
 
-.ep {
-  display: flex;
-  gap: 12px;
+.sort {
+  display: inline-flex;
   align-items: center;
-  padding: 10px 4px;
-  border-bottom: 1px solid var(--ln);
+  gap: 4px;
+  background: none;
+  border: 1px solid var(--ln);
+  color: var(--tx);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
 }
 
-.ep div {
+/* Episode: kotak, 3 per baris */
+.eps {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 8px;
+}
+
+.epb {
   min-width: 0;
+  min-height: 58px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: var(--sf);
+  border: 1px solid var(--ln);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
 }
 
-.ep-n {
-  min-width: 34px;
-  text-align: center;
+.epb b {
+  font-size: 15px;
   font-weight: 800;
   color: var(--ac);
-  font-size: 14px;
 }
 
-.ep b {
-  display: block;
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.ep small {
+.epb small {
   color: var(--mu);
-  font-size: 12px;
+  font-size: 11px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Filler: garis putus-putus */
+.epb.fil {
+  border-style: dashed;
 }
 
 .more {
