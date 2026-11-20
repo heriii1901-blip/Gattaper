@@ -22,8 +22,8 @@ export function Media({ type, list }) {
             <div key={d.id} className="stack">
               <em>{d.c} lembar</em>
               {Array.from({ length: k }, (_, i) => {
-                const a = (i - (k - 1) / 2) * 4
-                return <i key={i} style={{ background: col(d.n + i), transform: `rotate(${a}deg) translateX(${a}px)`, zIndex: i }} />
+                const a = (i - (k - 1) / 2) * 2
+                return <i key={i} style={{ background: col(d.n + i), transform: `rotate(${a}deg) translateX(${a * 0.8}px)`, zIndex: i }} />
               })}
               <b>{d.n}</b>
             </div>
