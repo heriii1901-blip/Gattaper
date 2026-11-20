@@ -42,6 +42,14 @@ export default function App() {
   // hapus dari Riwayat doang (item di Koleksi tetap ada)
   const removeHist = (ids) => setData((prev) => prev.map((x) => (ids.includes(x.id) ? { ...x, hid: true } : x)))
 
+  // Favorit dari halaman detail anime (Cari): klik sekali masuk Koleksi, klik lagi keluar. Gak pindah halaman.
+  const toggleFav = (a) =>
+    setData((prev) =>
+      prev.some((x) => x.aid === a.aid)
+        ? prev.filter((x) => x.aid !== a.aid)
+        : [{ id: Date.now(), aid: a.aid, t: 'anime', n: a.title, cover: a.cover, seasons: [1], ts: Date.now() }, ...prev]
+    )
+
   const title = NAV.find((n) => n[0] === page)[1]
 
   // pindah menu = tab Koleksi balik ke Anime (Cari punya state sendiri, reset otomatis pas ditinggal)
@@ -57,7 +65,7 @@ export default function App() {
       <main>
         {page === 'koleksi' && <Media type={cat} list={data.filter((d) => d.t === cat)} />}
         {page === 'riwayat' && <Riwayat data={data} onRemove={removeHist} />}
-        {page === 'cari' && <Cari data={data} />}
+        {page === 'cari' && <Cari data={data} onFav={toggleFav} />}
         {page === 'profil' && <Profil data={data} toggleTheme={toggleTheme} />}
       </main>
         <BottomNav page={page} setPage={go} onAdd={() => setAdding(true)} />
