@@ -1,0 +1,161 @@
+/* Halaman detail anime ala Tachiyomi: cover, info, deskripsi, genre, daftar episode */
+
+.det {
+  padding-bottom: 8px;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: var(--tx);
+  font-size: 14px;
+  font-weight: 700;
+  padding: 8px 0;
+  cursor: pointer;
+}
+
+.det-top {
+  display: flex;
+  gap: 14px;
+  margin: 6px 0 14px;
+}
+
+.det-cover {
+  width: 110px;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+  border-radius: 10px;
+  background: var(--sf);
+  flex-shrink: 0;
+}
+
+.det-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.det-info h2 {
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.det-info small {
+  display: block;
+  color: var(--mu);
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.det-info dl {
+  margin-top: 10px;
+  display: grid;
+  gap: 5px;
+}
+
+.det-info dl div {
+  font-size: 12.5px;
+}
+
+.det-info dt,
+.det-info dd {
+  display: inline;
+}
+
+.det-info dt {
+  color: var(--mu);
+  font-weight: 600;
+}
+
+.det-desc p {
+  font-size: 14px;
+  line-height: 1.55;
+  white-space: pre-line;
+}
+
+.det-desc p.clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.det-desc button {
+  background: none;
+  border: none;
+  color: var(--ac);
+  font-weight: 700;
+  font-size: 13px;
+  padding: 6px 0;
+  cursor: pointer;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 10px 0 16px;
+}
+
+.chips span {
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--sf);
+  border: 1px solid var(--ln);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.det-h {
+  font-size: 15px;
+  font-weight: 800;
+  margin: 6px 0 8px;
+}
+
+.ep {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 4px;
+  border-bottom: 1px solid var(--ln);
+}
+
+.ep div {
+  min-width: 0;
+}
+
+.ep-n {
+  min-width: 34px;
+  text-align: center;
+  font-weight: 800;
+  color: var(--ac);
+  font-size: 14px;
+}
+
+.ep b {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.ep small {
+  color: var(--mu);
+  font-size: 12px;
+}
+
+.more {
+  width: 100%;
+  margin-top: 12px;
+  padding: 11px;
+  border-radius: 999px;
+  border: 1px solid var(--ln);
+  background: var(--sf);
+  color: var(--tx);
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+}
