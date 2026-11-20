@@ -5,7 +5,7 @@
   position: relative;
   display: flex;
   gap: 8px;
-  padding: 8px 0;
+  padding: 10px 16px 6px;
   overflow-x: hidden;
 }
 
@@ -17,9 +17,10 @@
   border: 1px solid var(--ln);
   background: var(--sf);
   color: var(--mu);
-  padding: 7px 16px;
+  padding: 8px 18px;
   border-radius: 999px;
   font-size: 14px;
+  font-weight: 700;
   cursor: pointer;
   white-space: nowrap;
   display: flex;
@@ -43,4 +44,10 @@
   background: var(--ac2);
   border: 1px solid var(--ac);
   pointer-events: none;
+}
+
+/* Di halaman Cari, tab bar ada di dalam <main> yang udah punya padding 16px */
+main > .pills {
+  padding-left: 0;
+  padding-right: 0;
 }
