@@ -9,7 +9,7 @@ import { AnimeDetail } from './AnimeDetail.jsx'
 const DEBOUNCE = 600 // ms setelah berhenti ngetik, pencarian jalan otomatis
 const MIN = 2 // minimal huruf
 
-export function Cari() {
+export function Cari({ data, onFav }) {
   const [cat, setCat] = useState('anime')
   const [text, setText] = useState('') // isi kolom
   const [q, setQ] = useState('') // kata yang benar-benar dicari
@@ -41,7 +41,8 @@ export function Cari() {
     }
   }
 
-  if (open) return <AnimeDetail aid={open.aid} onBack={() => setOpen(null)} />
+  if (open)
+    return <AnimeDetail aid={open.aid} fav={data.some((x) => x.aid === open.aid)} onFav={onFav} onBack={() => setOpen(null)} />
 
   const cur = res[cat]
   const label = (CATS.find(([k]) => k === cat) || [])[1] || cat
