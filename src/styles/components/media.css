@@ -1,0 +1,119 @@
+/* Tampilan isi koleksi: grid anime, foto dikipas, grid video ala Pinterest */
+
+/* Anime: grid cover */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 10px;
+}
+
+.card {
+  position: relative;
+  aspect-ratio: 2/3;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  cursor: pointer;
+}
+
+.card span {
+  width: 100%;
+  padding: 18px 6px 6px;
+  font-size: 12px;
+  color: #fff;
+  background: linear-gradient(transparent,rgba(0,0,0,.75));
+}
+
+.bdg {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  background: var(--ac);
+  color: #fff;
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 6px;
+}
+
+/* Foto: ditumpuk dikipas */
+.fan {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 26px 14px;
+  padding-top: 10px;
+}
+
+.stack {
+  position: relative;
+  aspect-ratio: 3/4;
+}
+
+.stack i {
+  position: absolute;
+  inset: 0;
+  border-radius: 8px;
+  border: 2px solid var(--bg);
+  transform-origin: 50% 100%;
+}
+
+.stack b {
+  position: absolute;
+  bottom: -20px;
+  left: 0;
+  font-size: 12px;
+  font-weight: 500;
+  width: 100%;
+}
+
+.stack em {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 9;
+  background: rgba(0,0,0,.6);
+  color: #fff;
+  font-size: 11px;
+  font-style: normal;
+  padding: 2px 7px;
+  border-radius: 6px;
+}
+
+/* Video: grid ala Pinterest */
+.mas {
+  columns: 2;
+  column-gap: 10px;
+}
+
+.mas .m {
+  break-inside: avoid;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+}
+
+.m span {
+  width: 100%;
+  padding: 16px 8px 6px;
+  color: #fff;
+  font-size: 12px;
+  background: linear-gradient(transparent,rgba(0,0,0,.7));
+}
+
+.play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  opacity: .9;
+}
+
+.empty {
+  text-align: center;
+  color: var(--mu);
+  padding: 50px 10px;
+  font-size: 14px;
+}
