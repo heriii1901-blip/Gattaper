@@ -26,5 +26,5 @@ main {
   overflow-y: auto;
   overflow-x: hidden;
   overscroll-behavior: contain;
-  padding: 6px 16px 90px;
+  padding: 6px 16px 120px;
 }
