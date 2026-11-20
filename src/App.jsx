@@ -35,6 +35,7 @@ export default function App() {
       return [{ id: Date.now(), t, n, h: 1 + Math.random() * 0.9, c: 3 + Math.floor(Math.random() * 8), ts: 0 }, ...prev]
     })
     setCat(t)
+    setPage('koleksi')
     setAdding(false)
   }
 
@@ -50,8 +51,7 @@ export default function App() {
         {page === 'cari' && <Cari data={data} cat={cat} setCat={setCat} />}
         {page === 'profil' && <Profil data={data} toggleTheme={toggleTheme} />}
       </main>
-      {page === 'koleksi' && <button className="fab" aria-label="Tambah" onClick={() => setAdding(true)}>+</button>}
-      <BottomNav page={page} setPage={setPage} />
+        <BottomNav page={page} setPage={setPage} onAdd={() => setAdding(true)} />
       {adding && <AddDialog onSave={save} onClose={() => setAdding(false)} />}
     </div>
   )
