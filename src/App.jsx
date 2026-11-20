@@ -29,15 +29,18 @@ export default function App() {
       if (t === 'anime') {
         const ex = prev.find((x) => x.t === 'anime' && x.n.toLowerCase() === n.toLowerCase())
         if (ex) // season baru menyatu ke wadah anime yang sama
-          return prev.map((x) => x === ex ? { ...x, seasons: x.seasons.includes(s) ? x.seasons : [...x.seasons, s], ts: 0 } : x)
-        return [{ id: Date.now(), t, n, seasons: [s], ts: 0 }, ...prev]
+          return prev.map((x) => x === ex ? { ...x, { id: Date.now(), t, n, seasons: [s], ts: Date.now() } : x)
+        return [{ id: Date.now(), t, n, seasons: [s], ts: Date.now() }, ...prev]
       }
-      return [{ id: Date.now(), t, n, h: 1 + Math.random() * 0.9, c: 3 + Math.floor(Math.random() * 8), ts: 0 }, ...prev]
+      return [{ id: Date.now(), t, n, h: 1 + Math.random() * 0.9, c: 3 + Math.floor(Math.random() * 8), ts: Date.now() }, ...prev]
     })
     setCat(t)
     setPage('koleksi')
     setAdding(false)
   }
+
+  // hapus dari Riwayat doang (item di Koleksi tetap ada)
+  const removeHist = (ids) => setData((prev) => prev.map((x) => (ids.includes(x.id) ? { ...x, hid: true } : x)))
 
   const title = NAV.find((n) => n[0] === page)[1]
 
@@ -53,7 +56,7 @@ export default function App() {
       {page === 'koleksi' && <Pills cat={cat} setCat={setCat} />}
       <main>
         {page === 'koleksi' && <Media type={cat} list={data.filter((d) => d.t === cat)} />}
-        {page === 'riwayat' && <Riwayat data={data} />}
+        {page === 'riwayat' && <Riwayat data={data} onRemove={removeHist} />}
         {page === 'cari' && <Cari data={data} />}
         {page === 'profil' && <Profil data={data} toggleTheme={toggleTheme} />}
       </main>
