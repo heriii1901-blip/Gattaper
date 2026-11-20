@@ -1,0 +1,46 @@
+/* Tab pill Anime / Video / Foto dan penanda cairnya */
+
+/* Tab pill (Anime / Video / Foto) */
+.pills {
+  position: relative;
+  display: flex;
+  gap: 8px;
+  padding: 8px 0;
+  overflow-x: hidden;
+}
+
+.pill {
+  position: relative;
+  z-index: 1;
+  -webkit-tap-highlight-color: transparent;
+  transition: color .3s, background .3s, border-color .3s;
+  border: 1px solid var(--ln);
+  background: var(--sf);
+  color: var(--mu);
+  padding: 7px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.pill.on {
+  background: transparent;
+  color: var(--tx);
+  border-color: transparent;
+}
+
+/* Penanda yang meluncur di belakang pill aktif (posisinya diatur useLiquidPill) */
+.pill-ind {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  border-radius: 999px;
+  background: var(--ac2);
+  border: 1px solid var(--ac);
+  pointer-events: none;
+}
