@@ -41,6 +41,12 @@ export default function App() {
 
   const title = NAV.find((n) => n[0] === page)[1]
 
+  // pindah menu = tab Koleksi balik ke Anime (Cari punya state sendiri, reset otomatis pas ditinggal)
+  const go = (p) => {
+    if (p !== page) setCat('anime')
+    setPage(p)
+  }
+
   return (
     <div id="app">
       <header><h1>{title}</h1></header>
@@ -48,10 +54,10 @@ export default function App() {
       <main>
         {page === 'koleksi' && <Media type={cat} list={data.filter((d) => d.t === cat)} />}
         {page === 'riwayat' && <Riwayat data={data} />}
-        {page === 'cari' && <Cari data={data} cat={cat} setCat={setCat} />}
+        {page === 'cari' && <Cari data={data} />}
         {page === 'profil' && <Profil data={data} toggleTheme={toggleTheme} />}
       </main>
-        <BottomNav page={page} setPage={setPage} onAdd={() => setAdding(true)} />
+        <BottomNav page={page} setPage={go} onAdd={() => setAdding(true)} />
       {adding && <AddDialog onSave={save} onClose={() => setAdding(false)} />}
     </div>
   )
