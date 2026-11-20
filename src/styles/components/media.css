@@ -55,7 +55,7 @@
   position: absolute;
   inset: 0;
   border-radius: 8px;
-  border: 2px solid var(--bg);
+  border: 1px solid var(--bg);
   transform-origin: 50% 100%;
 }
 
