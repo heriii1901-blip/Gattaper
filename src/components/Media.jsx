@@ -7,6 +7,7 @@ export function Media({ type, list }) {
       <div className="grid">
         {list.map((d) => (
           <div key={d.id} className="card" style={{ background: col(d.n) }}>
+            {d.cover && <img src={d.cover} alt="" referrerPolicy="no-referrer" />}
             {d.seasons.length > 1 && <b className="bdg">{d.seasons.length} season</b>}
             <span>{d.n}</span>
           </div>
