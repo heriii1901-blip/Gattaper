@@ -6,9 +6,28 @@ const airing = (n) =>
   `Eps. ${n.episode} · ` +
   new Date(n.airingAt * 1000).toLocaleString('id-ID', { weekday: 'long', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
 
-export function AnimeDetail({ aid, onBack }) {
-  const { detail: d, status, eps, more } = useAnimeDetail(aid)
+const Heart = ({ on }) => (
+  <svg width="17" height="17" viewBox="0 0 24 24" fill={on ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinejoin="round">
+    <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21.2l7.8-7.7 1-1.1a5.5 5.5 0 0 0 0-7.8z" />
+  </svg>
+)
+
+const Out = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" />
+  </svg>
+)
+
+const UpDown = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M7 15l5 5 5-5M7 9l5-5 5 5" />
+  </svg>
+)
+
+export function AnimeDetail({ aid, fav, onFav, onBack }) {
+  const { detail: d, status, eps, more, all } = useAnimeDetail(aid)
   const [full, setFull] = useState(false)
+  const [desc, setDesc] = useState(false) // false = terlama dulu, true = terbaru dulu
 
   const total = d && (d.episodes || (d.nextEp ? d.nextEp.episode - 1 : 0))
   const rows = d && [
@@ -19,6 +38,14 @@ export function AnimeDetail({ aid, onBack }) {
     ['Skor', d.score ? `${d.score}/100` : ''],
     ['Episode berikut', d.nextEp ? airing(d.nextEp) : ''],
   ].filter(([, v]) => v)
+
+  // "Terbaru dulu" butuh semua episode, jadi sisa halaman dimuat otomatis
+  const toggleSort = () => {
+    const next = !desc
+    setDesc(next)
+    if (next) all()
+  }
+  const list = desc ? [...eps.items].reverse() : eps.items
 
   return (
     <div className="det">
@@ -45,6 +72,15 @@ export function AnimeDetail({ aid, onBack }) {
             </div>
           </div>
 
+          <div className="det-act">
+            <button className={'act' + (fav ? ' on' : '')} onClick={() => onFav(d)}>
+              <Heart on={fav} />{fav ? 'Difavoritkan' : 'Favorit'}
+            </button>
+            <a className="act" href={`https://anilist.co/anime/${d.aid}`} target="_blank" rel="noreferrer">
+              <Out />AniList
+            </a>
+          </div>
+
           {d.description && (
             <div className="det-desc">
               <p className={full ? '' : 'clamp'}>{d.description}</p>
@@ -58,19 +94,24 @@ export function AnimeDetail({ aid, onBack }) {
             <div className="chips">{d.genres.map((g) => <span key={g}>{g}</span>)}</div>
           )}
 
-          <h3 className="det-h">{total ? `${total} episode` : 'Episode'}</h3>
-          {eps.items.map((e) => (
-            <div key={e.no} className="ep">
-              <span className="ep-n">{e.no}</span>
-              <div>
-                <b>{e.title || `Episode ${e.no}`}</b>
-                {(e.aired || e.filler) && <small>{[e.aired, e.filler && 'filler'].filter(Boolean).join(' • ')}</small>}
+          <div className="det-bar">
+            <h3 className="det-h">{total ? `${total} episode` : 'Episode'}</h3>
+            <button className="sort" onClick={toggleSort}>
+              {desc ? 'Terbaru dulu' : 'Terlama dulu'}<UpDown />
+            </button>
+          </div>
+
+          <div className="eps">
+            {list.map((e) => (
+              <div key={e.no} className={'epb' + (e.filler ? ' fil' : '')}>
+                <b>{e.no}</b>
+                {(e.title || e.aired) && <small>{e.title || e.aired}</small>}
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
           {eps.loading && <div className="empty" style={{ padding: 20 }}>Memuat episode…</div>}
           {!eps.loading && !eps.items.length && <div className="empty" style={{ padding: 20 }}>Belum ada daftar episode.</div>}
-          {eps.hasNext && !eps.loading && <button className="more" onClick={more}>Muat lagi</button>}
+          {eps.hasNext && !eps.loading && !desc && <button className="more" onClick={more}>Muat lagi</button>}
         </>
       )}
     </div>
