@@ -82,6 +82,7 @@ h1 {
 
 /* Tab pill (Anime / Video / Foto) */
 .pills {
+  position: relative;
   display: flex;
   gap: 8px;
   padding: 8px 16px;
@@ -89,6 +90,10 @@ h1 {
 }
 
 .pill {
+  position: relative;
+  z-index: 1;
+  -webkit-tap-highlight-color: transparent;
+  transition: color .3s, background .3s, border-color .3s;
   border: 1px solid var(--ln);
   background: var(--sf);
   color: var(--mu);
@@ -103,9 +108,26 @@ h1 {
 }
 
 .pill.on {
-  background: var(--ac2);
+  background: transparent;
   color: var(--tx);
+  border-color: transparent;
+}
+
+.stat .pill.on {
+  background: var(--ac2);
   border-color: var(--ac);
+}
+
+/* Penanda yang meluncur di belakang pill aktif (posisinya diatur useLiquidPill) */
+.pill-ind {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  border-radius: 999px;
+  background: var(--ac2);
+  border: 1px solid var(--ac);
+  pointer-events: none;
 }
 
 main {
@@ -275,6 +297,10 @@ nav {
 }
 
 nav button {
+  position: relative;
+  z-index: 1;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
   flex: 1;
   border: 0;
   background: none;
@@ -288,17 +314,44 @@ nav button {
 }
 
 nav button i {
-  padding: 4px 18px;
-  border-radius: 999px;
+  width: 56px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
   display: flex;
+  transform-origin: center;
+}
+
+/* Ditekan: mendem cepat. Dilepas: mantul kayak per */
+nav button:active i {
+  transform: scale(0.8);
+  transition: transform .1s ease-out;
+}
+
+nav button:not(:active) i {
+  animation: navBounce .5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes navBounce {
+  0% { transform: scale(0.8); }
+  55% { transform: scale(1.18); }
+  75% { transform: scale(0.95); }
+  100% { transform: scale(1); }
 }
 
 nav button.on {
   color: var(--tx);
 }
 
-nav button.on i {
+/* Pill cairan di belakang ikon aktif (posisinya diatur useLiquidPill) */
+.nav-pill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  border-radius: 999px;
   background: var(--ac2);
+  pointer-events: none;
 }
 
 /* Tombol tambah & dialog */
@@ -387,4 +440,18 @@ input,select {
 
 main>input {
   margin-bottom: 10px;
+}
+
+/* Hilangkan kotak biru/abu saat tombol disentuh. Outline cuma muncul buat navigasi keyboard */
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus {
+  outline: none;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--ac);
+  outline-offset: 2px;
 }
