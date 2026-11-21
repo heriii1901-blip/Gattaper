@@ -220,3 +220,27 @@
   font-size: 14px;
   cursor: pointer;
 }
+
+/* Episode bisa diklik + penanda progres tonton (kayak chapter di Tachiyomi) */
+.epb {
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.epb.seen {
+  opacity: .5;
+}
+
+.epb .pg {
+  color: var(--ac);
+  font-weight: 600;
+}
+
+.epb .bar {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  background: var(--ac);
+}
