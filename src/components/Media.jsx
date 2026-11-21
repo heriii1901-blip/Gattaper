@@ -1,12 +1,12 @@
 import { col } from '../data/data.js'
 
-export function Media({ type, list }) {
+export function Media({ type, list, onOpen }) {
   if (!list.length) return <div className="empty">Belum ada isinya.</div>
   if (type === 'anime')
     return (
       <div className="grid">
         {list.map((d) => (
-          <div key={d.id} className="card" style={{ background: col(d.n) }}>
+          <div key={d.id} className="card" style={{ background: col(d.n), cursor: d.aid ? 'pointer' : 'default' }} onClick={() => d.aid && onOpen?.(d.aid)}>
             {d.cover && <img src={d.cover} alt="" referrerPolicy="no-referrer" />}
             {d.seasons.length > 1 && <b className="bdg">{d.seasons.length} season</b>}
             <span>{d.n}</span>
