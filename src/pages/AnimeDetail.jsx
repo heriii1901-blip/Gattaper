@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { useAnimeDetail } from '../hooks/useAnimeDetail.js'
+import { useProgress } from '../hooks/useProgress.js'
+import { Player, fmt } from './Player.jsx'
 
 // Waktu tayang episode berikutnya, mis. "Jumat, 21 Nov 19.30"
 const airing = (n) =>
@@ -28,6 +30,8 @@ export function AnimeDetail({ aid, fav, onFav, onBack }) {
   const { detail: d, status, eps, more, all } = useAnimeDetail(aid)
   const [full, setFull] = useState(false)
   const [desc, setDesc] = useState(false) // false = terlama dulu, true = terbaru dulu
+  const [playing, setPlaying] = useState(null) // episode yang lagi diputar
+  const pg = useProgress()
 
   const total = d && (d.episodes || (d.nextEp ? d.nextEp.episode - 1 : 0))
   const rows = d && [
@@ -46,6 +50,8 @@ export function AnimeDetail({ aid, fav, onFav, onBack }) {
     if (next) all()
   }
   const list = desc ? [...eps.items].reverse() : eps.items
+
+  if (playing && d) return <Player anime={d} ep={playing} streams={d.streams} pg={pg} onBack={() => setPlaying(null)} />
 
   return (
     <div className="det">
@@ -102,12 +108,17 @@ export function AnimeDetail({ aid, fav, onFav, onBack }) {
           </div>
 
           <div className="eps">
-            {list.map((e) => (
-              <div key={e.no} className={'epb' + (e.filler ? ' fil' : '')}>
-                <b>{e.no}</b>
-                {(e.title || e.aired) && <small>{e.title || e.aired}</small>}
-              </div>
-            ))}
+            {list.map((e) => {
+              const p = pg.get(d.aid, e.no)
+              return (
+                <div key={e.no} className={'epb' + (e.filler ? ' fil' : '') + (p?.done ? ' seen' : '')} onClick={() => setPlaying(e)}>
+                  <b>{e.no}</b>
+                  {(e.title || e.aired) && <small>{e.title || e.aired}</small>}
+                  {p && <small className="pg">{p.done ? 'Selesai' : `Terakhir ${fmt(p.t)}`}</small>}
+                  {p && !p.done && p.d > 0 && <i className="bar" style={{ width: `${Math.min(100, (p.t / p.d) * 100)}%` }} />}
+                </div>
+              )
+            })}
           </div>
           {eps.loading && <div className="empty" style={{ padding: 20 }}>Memuat episode…</div>}
           {!eps.loading && !eps.items.length && <div className="empty" style={{ padding: 20 }}>Belum ada daftar episode.</div>}
