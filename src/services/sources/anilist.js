@@ -50,6 +50,7 @@ const DETAIL = `query ($id: Int) {
     genres format status episodes season seasonYear source averageScore
     studios(isMain: true) { nodes { name } }
     nextAiringEpisode { episode airingAt }
+    externalLinks { site url type }
   }
 }`
 
@@ -88,6 +89,7 @@ export const anilist = {
       episodes: m.episodes || null,
       score: m.averageScore || null,
       nextEp: m.nextAiringEpisode || null,
+      streams: (m.externalLinks || []).filter((l) => l.type === 'STREAMING').map((l) => ({ site: l.site, url: l.url })),
     }
   },
 }
