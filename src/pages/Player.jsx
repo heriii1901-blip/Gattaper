@@ -10,11 +10,17 @@ export const fmt = (s) => {
   return h ? `${h}:${pad(m)}:${pad(s % 60)}` : `${m}:${pad(s % 60)}`
 }
 
+const EMBED = 'embed:' // awalan penanda mode embed (iframe) di link yang disimpan
+
 export function Player({ anime, ep, streams, pg, onBack }) {
   const vid = useRef(null)
   const last = useRef({ t: 0, d: 0, saved: 0 })
   const url = pg.link(anime.aid, ep.no)
+  const embed = url.startsWith(EMBED)
+  const real = embed ? url.slice(EMBED.length) : url
+  const hls = !embed && /\.m3u8(\?|$)/i.test(real)
   const [input, setInput] = useState('')
+  const [asEmbed, setAsEmbed] = useState(false)
   const [editing, setEditing] = useState(!url)
   const [err, setErr] = useState(false)
   const old = pg.get(anime.aid, ep.no)
@@ -36,6 +42,30 @@ export function Player({ anime, ep, streams, pg, onBack }) {
       flush()
     }
   }, [])
+
+  // HLS (.m3u8): Safari bisa langsung, browser lain lewat hls.js (dimuat cuma kalau perlu)
+  useEffect(() => {
+    if (!hls || !vid.current) return
+    const v = vid.current
+    if (v.canPlayType('application/vnd.apple.mpegurl')) {
+      v.src = real
+      return
+    }
+    let inst
+    let dead = false
+    import('hls.js').then(({ default: Hls }) => {
+      if (dead) return
+      if (!Hls.isSupported()) return setErr(true)
+      inst = new Hls()
+      inst.loadSource(real)
+      inst.attachMedia(v)
+      inst.on(Hls.Events.ERROR, (_, e) => e.fatal && setErr(true))
+    })
+    return () => {
+      dead = true
+      inst?.destroy()
+    }
+  }, [real, hls])
 
   const onMeta = (e) => {
     const v = e.currentTarget
@@ -61,11 +91,15 @@ export function Player({ anime, ep, streams, pg, onBack }) {
   const submit = () => {
     const v = input.trim()
     if (!/^https?:\/\//i.test(v)) return
-    pg.setLink(anime.aid, ep.no, v)
+    const tpl = /\{eps2?\}/.test(v) // ada {eps}/{eps2} = template untuk semua episode anime ini
+    pg.setLink(anime.aid, tpl ? '*' : ep.no, (asEmbed ? EMBED : '') + v)
     setInput('')
     setErr(false)
     setEditing(false)
   }
+
+  const own = pg.own(anime.aid, ep.no)
+  const remove = () => pg.setLink(anime.aid, own ? ep.no : '*', '')
 
   return (
     <div className="det ply">
@@ -77,11 +111,11 @@ export function Player({ anime, ep, streams, pg, onBack }) {
       <h3>{anime.title}</h3>
       <p className="note">Episode {ep.no}{ep.title ? ` · ${ep.title}` : ''}</p>
 
-      {url && (
+      {url && !embed && (
         <video
           key={url}
           ref={vid}
-          src={url}
+          src={hls ? undefined : real}
           controls
           playsInline
           preload="metadata"
@@ -89,33 +123,52 @@ export function Player({ anime, ep, streams, pg, onBack }) {
           onTimeUpdate={onTime}
           onPause={flush}
           onEnded={flush}
-          onError={() => setErr(true)}
+          onError={() => !hls && setErr(true)}
         />
       )}
 
+      {url && embed && (
+        <iframe
+          key={url}
+          src={real}
+          title={`${anime.title} eps ${ep.no}`}
+          allow="autoplay; fullscreen; picture-in-picture"
+          allowFullScreen
+          sandbox="allow-scripts allow-same-origin allow-presentation allow-popups"
+          referrerPolicy="no-referrer"
+        />
+      )}
+
+      {embed && <p className="note">Mode embed: menit terakhir gak bisa dicatat (player-nya ada di dalam halaman lain).</p>}
       {url && resumed > 0 && <p className="note">Lanjut dari menit {fmt(resumed)}</p>}
-      {err && <p className="note err">Video gagal diputar. Cek linknya, atau formatnya bukan .mp4/.webm, atau server videonya memblokir.</p>}
+      {err && <p className="note err">Video gagal diputar. Cek linknya, formatnya, atau server videonya memblokir.</p>}
 
       {url && !editing && (
         <div className="det-act">
           <button className="act" onClick={() => setEditing(true)}>Ganti link</button>
-          <button className="act" onClick={() => pg.setLink(anime.aid, ep.no, '')}>Hapus link</button>
+          <button className="act" onClick={remove}>{own ? 'Hapus link' : 'Hapus template'}</button>
         </div>
       )}
 
       {editing && (
         <>
           <p className="note">
-            {url ? 'Tempel link video baru:' : 'Episode ini belum punya video. Tempel link video langsung (.mp4 / .webm), misalnya file kamu di Cloudflare R2:'}
+            {url ? 'Tempel link baru:' : 'Episode ini belum punya video. Tempel link kamu sendiri (.mp4, .webm, .m3u8, atau halaman embed).'}
+            {' '}Pakai <code>{'{eps}'}</code> (atau <code>{'{eps2}'}</code> untuk 01, 02, …) di link untuk bikin template semua episode anime ini sekali tempel,
+            mis. <code>https://domainmu.com/frieren/ep{'{eps2}'}.mp4</code>
           </p>
           <input
-            placeholder="https://…/episode-1.mp4"
+            placeholder="https://…"
             value={input}
             inputMode="url"
             enterKeyHint="done"
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && submit()}
           />
+          <label className="chk">
+            <input type="checkbox" checked={asEmbed} onChange={(e) => setAsEmbed(e.target.checked)} />
+            Link ini halaman player (embed)
+          </label>
           <div className="det-act">
             <button className="act on" onClick={submit}>Simpan &amp; putar</button>
             {url && <button className="act" onClick={() => setEditing(false)}>Batal</button>}
@@ -131,7 +184,6 @@ export function Player({ anime, ep, streams, pg, onBack }) {
               <a key={s.url} href={s.url} target="_blank" rel="noreferrer">{s.site}</a>
             ))}
           </div>
-          <p className="note">Kalau nonton lewat situs resmi, menit terakhirnya gak bisa ikut kecatat di Gattaper.</p>
         </>
       )}
     </div>
