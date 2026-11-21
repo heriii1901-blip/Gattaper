@@ -5,13 +5,16 @@ import { Media } from './components/Media.jsx'
 import { AddDialog } from './components/AddDialog.jsx'
 import { BottomNav } from './components/BottomNav.jsx'
 import { Riwayat } from './pages/Riwayat.jsx'
+import { AnimeDetail } from './pages/AnimeDetail.jsx'
+import { usePersisted } from './hooks/usePersisted.js'
 import { Cari } from './pages/Cari.jsx'
 import { Profil } from './pages/Profil.jsx'
 
 export default function App() {
   const [page, setPage] = useState('koleksi')
   const [cat, setCat] = useState('anime')
-  const [data, setData] = useState(SEED)
+  const [data, setData] = usePersisted('gattaper:data', SEED) // tersimpan di browser, gak hilang pas refresh
+  const [view, setView] = useState(null) // aid anime yang lagi dibuka dari Koleksi
   const [adding, setAdding] = useState(false)
   const [theme, setTheme] = useState(null)
 
@@ -55,15 +58,19 @@ export default function App() {
   // pindah menu = tab Koleksi balik ke Anime (Cari punya state sendiri, reset otomatis pas ditinggal)
   const go = (p) => {
     if (p !== page) setCat('anime')
+    setView(null)
     setPage(p)
   }
 
   return (
     <div id="app">
       <header><h1>{title}</h1></header>
-      {page === 'koleksi' && <Pills cat={cat} setCat={setCat} />}
+      {page === 'koleksi' && !view && <Pills cat={cat} setCat={setCat} />}
       <main>
-        {page === 'koleksi' && <Media type={cat} list={data.filter((d) => d.t === cat)} />}
+        {page === 'koleksi' && view && (
+          <AnimeDetail aid={view} fav={data.some((x) => x.aid === view)} onFav={toggleFav} onBack={() => setView(null)} />
+        )}
+        {page === 'koleksi' && !view && <Media type={cat} list={data.filter((d) => d.t === cat)} onOpen={setView} />}
         {page === 'riwayat' && <Riwayat data={data} onRemove={removeHist} />}
         {page === 'cari' && <Cari data={data} onFav={toggleFav} />}
         {page === 'profil' && <Profil data={data} toggleTheme={toggleTheme} />}
