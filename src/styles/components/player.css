@@ -35,3 +35,35 @@
   font-weight: 700;
   text-decoration: none;
 }
+
+.ply iframe {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border: 0;
+  background: #000;
+  border-radius: 12px;
+  display: block;
+}
+
+.ply code {
+  background: var(--sf);
+  border: 1px solid var(--ln);
+  border-radius: 6px;
+  padding: 1px 5px;
+  font-size: 12px;
+  word-break: break-all;
+}
+
+.ply .chk {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--mu);
+  margin: 4px 0 8px;
+}
+
+.ply .chk input {
+  width: auto;
+  margin: 0;
+}
